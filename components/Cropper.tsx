@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { BackHandler, useWindowDimensions} from 'react-native';
 import { Canvas, Fill, Image, Points, Rect, useImage, vec  } from '@shopify/react-native-skia';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
@@ -43,7 +43,7 @@ export default function Cropper(props:CropperProps) {
     return () => backHandler.remove();
   }, []);
 
-  const getPoints = () => {
+  const calculatePoints = () => {
     let newPoints = [
       vec(points[0].x,points[0].y),
       vec(points[1].x,points[1].y),
@@ -54,10 +54,13 @@ export default function Cropper(props:CropperProps) {
     return newPoints;
   };
 
+  const getPoints = useMemo(
+    () => calculatePoints(),
+    [points]
+  );
+
   const panGesture = Gesture.Pan()
     .onChange((e) => {
-      console.log(e);
-      console.log(points);
       let newPoints:[Point,Point,Point,Point] = points;
       newPoints[0].x = newPoints[0].x + e.changeX;
       newPoints[0].y = newPoints[0].y + e.changeY;
@@ -77,7 +80,7 @@ export default function Cropper(props:CropperProps) {
         <Fill color="white" />
         <Image image={image} fit="contain" x={0} y={0} width={width} height={height} />
         <Points
-          points={getPoints()}
+          points={getPoints}
           mode="polygon"
           color="lightblue"
           style="fill"
