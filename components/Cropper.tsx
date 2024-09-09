@@ -4,6 +4,7 @@ import { BackHandler, useWindowDimensions} from 'react-native';
 import { Canvas, Fill, Image, Points, Rect, SkPoint, useImage, vec  } from '@shopify/react-native-skia';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { runOnJS, useDerivedValue, useSharedValue } from 'react-native-reanimated';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export interface Photo {
   photoUri:string;
@@ -32,6 +33,7 @@ export default function Cropper(props:CropperProps) {
   const y3 = useSharedValue(100);
   const x4 = useSharedValue(100);
   const y4 = useSharedValue(100);
+  const selectedIndex = useSharedValue(-1);
   const rectWidth = 10;
   const rect1X = useDerivedValue(() => {
     return x1.value - rectWidth;
@@ -88,14 +90,38 @@ export default function Cropper(props:CropperProps) {
 
   const panGesture = Gesture.Pan()
     .onChange((e) => {
-      console.log(e);
-      x1.value = x1.value + e.changeX;
-      y1.value = y1.value + e.changeY;
+      let x,y;
+      if (selectedIndex.value === 0) {
+        x = x1;
+        y = y1;
+      }else if (selectedIndex.value === 1) {
+        x = x2;
+        y = y2;
+      }else if (selectedIndex.value === 2) {
+        x = x3;
+        y = y3;
+      }else if (selectedIndex.value === 3) {
+        x = x4;
+        y = y4;
+      }
+      if (x && y) {
+        x.value = x.value + e.changeX;
+        y.value = y.value + e.changeY;
+      }
     });
 
   const tapGesture = Gesture.Tap()
     .onBegin((e) => {
       console.log(e);
+      const selectRect = () => {
+        let rectList = [{x:rect1X,y:rect1Y},{x:rect2X,y:rect2Y},{x:rect3X,y:rect3Y},{x:rect4X,y:rect4Y}];
+        for (let index = 0; index < 4; index++) {
+          const rect = rectList[index];
+          console.log(rect);
+        }
+      };
+      selectedIndex.value = 3;
+      selectRect();
     });
 
   const composed = Gesture.Simultaneous(tapGesture, panGesture);
