@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import { BackHandler, useWindowDimensions} from 'react-native';
-import { Canvas, Fill, Image, Points, Rect, useImage, vec  } from '@shopify/react-native-skia';
+import { Alert, BackHandler, StyleSheet, Text, TouchableOpacity, useWindowDimensions} from 'react-native';
+import { Canvas, Fill, Image, Points, Rect, useImage, vec } from '@shopify/react-native-skia';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { runOnJS, useDerivedValue, useSharedValue } from 'react-native-reanimated';
+import * as DDN from 'vision-camera-dynamsoft-document-normalizer';
 
 export interface Photo {
   photoUri:string;
@@ -14,7 +15,7 @@ export interface Photo {
 export interface CropperProps{
   photo?:Photo,
   onCanceled?: () => void;
-  onConfirmed?: (base64:string) => void;
+  onConfirmed?: (path:string) => void;
 }
 export interface Point {
   x: number;
@@ -75,9 +76,74 @@ export default function Cropper(props:CropperProps) {
       'hardwareBackPress',
       backAction
     );
-
+    detectDocument();
     return () => backHandler.remove();
   }, []);
+
+  const detectDocument = async () => {
+    if (props.photo?.photoUri) {
+      let results = await DDN.detectFile(props.photo.photoUri);
+      let detected = false;
+      for (let index = 0; index < results.length; index++) {
+        const detectedResult = results[index];
+        if (detectedResult.confidenceAsDocumentBoundary > 50) {
+          points.value = scaledPoints(detectedResult.location.points);
+          detected = true;
+          break;
+        }
+      }
+      if (!detected) {
+        Alert.alert('','No documents detected');
+      }
+    }
+  };
+
+  const scaledPoints = (detectedPoints:[Point,Point,Point,Point]) => {
+    let photoWidth:number = props.photo!.photoWidth;
+    let photoHeight:number = props.photo!.photoHeight;
+    let newPoints = [];
+    let {displayedWidth, displayedHeight} = getDisplayedSize();
+    let widthDiff = (width - displayedWidth) / 2;
+    let heightDiff = (height - displayedHeight) / 2;
+    let xRatio = displayedWidth / photoWidth;
+    let yRatio = displayedHeight / photoHeight;
+    for (let index = 0; index < detectedPoints.length; index++) {
+      const point = detectedPoints[index];
+      const x = point.x * xRatio + widthDiff;
+      const y = point.y * yRatio + heightDiff;
+      newPoints.push({x:x,y:y});
+    }
+    return newPoints;
+  };
+
+  const pointsScaledBack = () => {
+    let photoWidth:number = props.photo!.photoWidth;
+    let photoHeight:number = props.photo!.photoHeight;
+    let newPoints = [];
+    let {displayedWidth, displayedHeight} = getDisplayedSize();
+    let widthDiff = (width - displayedWidth) / 2;
+    let heightDiff = (height - displayedHeight) / 2;
+    let xRatio = displayedWidth / photoWidth;
+    let yRatio = displayedHeight / photoHeight;
+    for (let index = 0; index < points.value.length; index++) {
+      const point = points.value[index];
+      const x = Math.ceil((point.x - widthDiff) / xRatio);
+      const y = Math.ceil((point.y - heightDiff) / yRatio);
+      newPoints.push({x:x,y:y});
+    }
+    return newPoints as [Point,Point,Point,Point];
+  };
+
+  const getDisplayedSize = () => {
+    let displayedWidth = width;
+    let displayedHeight = height;
+    if (props.photo!.photoHeight / props.photo!.photoWidth > height / width) {
+      displayedWidth = props.photo!.photoWidth * (height / props.photo!.photoHeight);
+    }else{
+      displayedHeight = props.photo!.photoHeight * (width / props.photo!.photoWidth);
+    }
+    return {displayedWidth:displayedWidth,displayedHeight:displayedHeight};
+  };
 
 
   const panGesture = Gesture.Pan()
@@ -110,6 +176,26 @@ export default function Cropper(props:CropperProps) {
 
   const composed = Gesture.Simultaneous(tapGesture, panGesture);
 
+  const cancel = () => {
+    if (props.onCanceled) {
+      props.onCanceled();
+    }
+  };
+
+  const confirm = async () => {
+    if (props.onConfirmed) {
+      let location = {points:pointsScaledBack()};
+      try {
+        let normalizedImageResult = await DDN.normalizeFile(props.photo!.photoUri, location, {saveNormalizationResultAsFile:true});
+        if (normalizedImageResult.imageURL) {
+          props.onConfirmed(normalizedImageResult.imageURL);
+        }
+      } catch (error) {
+        Alert.alert('','Incorrect Selection');
+      }
+    }
+  };
+
   const rects = () => {
     let rectList = [{x:rect1X,y:rect1Y},{x:rect2X,y:rect2Y},{x:rect3X,y:rect3Y},{x:rect4X,y:rect4Y}];
     const items = rectList.map((rect,index) =>
@@ -119,20 +205,55 @@ export default function Cropper(props:CropperProps) {
   };
 
   return (
-    <GestureDetector gesture={composed}>
-      <Canvas style={{ flex: 1 }}>
-        <Fill color="white" />
-        <Image image={image} fit="contain" x={0} y={0} width={width} height={height} />
-        <Points
-          points={polygonPoints}
-          mode="polygon"
-          color="lightblue"
-          style="fill"
-          strokeWidth={4}
-        />
-        {rects()}
-      </Canvas>
-    </GestureDetector>
+    <>
+      <GestureDetector gesture={composed}>
+        <Canvas style={{ flex: 1 }}>
+          <Fill color="white" />
+          <Image image={image} fit="contain" x={0} y={0} width={width} height={height} />
+          <Points
+            points={polygonPoints}
+            mode="polygon"
+            color="lightblue"
+            style="fill"
+            strokeWidth={4}
+          />
+          {rects()}
+        </Canvas>
+      </GestureDetector>
+      <TouchableOpacity
+        style={[styles.button,styles.cancel]}
+        onPress={cancel}
+      >
+        <Text>✕</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button,styles.confirm]}
+        onPress={confirm}
+      >
+        <Text>✓</Text>
+      </TouchableOpacity>
+    </>
   );
 }
 
+const styles = StyleSheet.create({
+  button: {
+    position:'absolute',
+    padding: 5,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+  },
+  confirm:{
+    backgroundColor: 'lightgreen',
+    right: 25,
+    bottom: 50,
+  },
+  cancel:{
+    backgroundColor: 'red',
+    right: 25,
+    bottom: 125,
+  },
+});

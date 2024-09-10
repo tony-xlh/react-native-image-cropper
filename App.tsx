@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, View, Text, Button } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Text, Button, Alert, Image } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Cropper, { Photo } from './components/Cropper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as DDN from 'vision-camera-dynamsoft-document-normalizer';
 
 const Separator = () => (
   <View style={styles.separator} />
@@ -11,6 +12,8 @@ const Separator = () => (
 export default function App() {
   const [showCropper, setShowCropper] = React.useState(false);
   const [photo, setPhoto] = React.useState<Photo|undefined>(undefined);
+  const [croppedImageURL, setCroppedImageURL] = React.useState('');
+  const [initializing,setInitializing] = React.useState(true);
   const pickAndCrop = async () => {
     const response = await launchImageLibrary({ mediaType: 'photo'});
     if (response && response.assets) {
@@ -27,24 +30,64 @@ export default function App() {
       }
     }
   };
+  React.useEffect(() => {
+    const initLicense = async () => {
+      let result = await DDN.initLicense('DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==');
+      if (result === false) {
+        Alert.alert('','License invalid');
+      }else{
+        setInitializing(false);
+      }
+    };
+    initLicense();
+  }, []);
+
+  const displayCroppedImage = (path:string) => {
+    console.log("home: "+path);
+    setShowCropper(false);
+    setCroppedImageURL(path);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {!showCropper && (
         <View style={styles.home}>
           <Text style={styles.title}>
-            Dynamsoft Barcode Reader Demo
+            Dynamsoft Docuemnt Normalizer Demo
           </Text>
           <Separator />
           <Button
             title="Pick an image and crop"
             onPress={() => pickAndCrop()}
           />
+          {initializing && (
+            <>
+              <Separator />
+              <Text>
+                Initializing...
+              </Text>
+            </>
+          )}
+          {croppedImageURL !== '' && (
+            <>
+              <Separator />
+              <Text>
+                  Image:
+                </Text>
+              <Image
+                style={styles.image}
+                source={{
+                  uri: 'file://' + croppedImageURL,
+                }}
+              />
+            </>
+          )}
         </View>
       )}
       {showCropper && (
         <>
           <GestureHandlerRootView>
-            <Cropper photo={photo} onCanceled={()=>setShowCropper(false)}/>
+            <Cropper photo={photo} onCanceled={()=>setShowCropper(false)} onConfirmed={(path) => displayCroppedImage(path)}/>
           </GestureHandlerRootView>
         </>
       )}
@@ -65,5 +108,10 @@ const styles = StyleSheet.create({
   },
   separator: {
     marginVertical: 4,
+  },
+  image: {
+    resizeMode:'contain',
+    height: 300,
+    width: 300,
   },
 });
