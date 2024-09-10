@@ -5040,10 +5040,10 @@ v8-to-istanbul@^9.0.1:
 vary@~1.1.2:
   version "1.1.2"
 
-vision-camera-dynamsoft-document-normalizer@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.npmmirror.com/vision-camera-dynamsoft-document-normalizer/-/vision-camera-dynamsoft-document-normalizer-3.2.2.tgz"
-  integrity sha512-jJJNt0dX0ieM5XrJ/vzSSDgaB5qyhReqM7CIhZ5TN5+crEPNRGqDOAx9LZvL+S7yO8NRHg5vMYnGNoBIdfPz0Q==
+vision-camera-dynamsoft-document-normalizer@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.npmjs.org/vision-camera-dynamsoft-document-normalizer/-/vision-camera-dynamsoft-document-normalizer-3.2.3.tgz"
+  integrity sha512-k6qOD5ExDB1+Z3JSES2ZuF8isiVI17ZKvzgVZhCuj/GrPGysSgp+4kF031Je28gu5Ojj7eUozo3GWWoZy4zeyg==
 
 vlq@^1.0.0:
   version "1.0.1"
