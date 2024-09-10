@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { BackHandler, useWindowDimensions} from 'react-native';
-import { Canvas, Fill, Image, Points, Rect, SkPoint, useImage, vec  } from '@shopify/react-native-skia';
+import { Canvas, Fill, Image, Points, Rect, useImage, vec  } from '@shopify/react-native-skia';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { runOnJS, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 

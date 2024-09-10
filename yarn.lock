@@ -1461,7 +1461,7 @@
     invariant "^2.2.4"
     nullthrows "^1.1.1"
 
-"@shopify/react-native-skia@^1.3.11":
+"@shopify/react-native-skia@*", "@shopify/react-native-skia@^1.3.11":
   version "1.3.11"
   resolved "https://registry.npmmirror.com/@shopify/react-native-skia/-/react-native-skia-1.3.11.tgz"
   integrity sha512-fIkxh77TVbIFAIFuJbB9wjNCvehOeARWsCOTSo5HdkjZ3/f4QPGR4RWN5zOMvi8aD83oRfJ6AVcnozFYYZREaA==
@@ -4368,7 +4368,7 @@ react-native-image-picker@^7.1.2:
   resolved "https://registry.npmmirror.com/react-native-image-picker/-/react-native-image-picker-7.1.2.tgz"
   integrity sha512-b5y5nP60RIPxlAXlptn2QwlIuZWCUDWa/YPUVjgHc0Ih60mRiOg1PSzf0IjHSLeOZShCpirpvSPGnDExIpTRUg==
 
-react-native-reanimated@^3.15.1, react-native-reanimated@>=2.0.0:
+react-native-reanimated@*, react-native-reanimated@^3.15.1, react-native-reanimated@>=2.0.0:
   version "3.15.1"
   resolved "https://registry.npmmirror.com/react-native-reanimated/-/react-native-reanimated-3.15.1.tgz"
   integrity sha512-DbBeUUExtJ1x1nfE94I8qgDgWjq5ztM3IO/+XFO+agOkPeVpBs5cRnxHfJKrjqJ2MgwhJOUDmtHxo+tDsoeitg==
@@ -4393,6 +4393,18 @@ react-native-svg@^15.6.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
     warn-once "0.1.1"
+
+react-native-vision-camera@*, react-native-vision-camera@^4.5.3:
+  version "4.5.3"
+  resolved "https://registry.npmmirror.com/react-native-vision-camera/-/react-native-vision-camera-4.5.3.tgz"
+  integrity sha512-wulpS6ZY6SwuYMDD8csIFMFJ6lXeQq4bJvaAhwEnr0R9cZ53jDUs0/SFZva6UFEPIw64h0IdrrzuVTEufhDSgQ==
+
+react-native-worklets-core@*:
+  version "1.3.3"
+  resolved "https://registry.npmmirror.com/react-native-worklets-core/-/react-native-worklets-core-1.3.3.tgz"
+  integrity sha512-wlkuhpUo4Wd9WBcnKuXWv775rYNYMfDxUySCZYxd3VDtwnF8PHPqAJllVIlHjamPNKpcitFvAgQa/C3YOsJwgQ==
+  dependencies:
+    string-hash-64 "^1.0.3"
 
 react-native@*, react-native@>=0.64, react-native@0.75.2:
   version "0.75.2"
@@ -4806,6 +4818,11 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
+string-hash-64@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmmirror.com/string-hash-64/-/string-hash-64-1.0.3.tgz"
+  integrity sha512-D5OKWKvDhyVWWn2x5Y9b+37NUllks34q1dCDhk/vYcso9fmhs+Tl3KR/gE4v5UNj2UA35cnX4KdVVGkG1deKqw==
+
 string-length@^4.0.1:
   version "4.0.2"
   dependencies:
@@ -5091,6 +5108,11 @@ v8-to-istanbul@^9.0.1:
 
 vary@~1.1.2:
   version "1.1.2"
+
+vision-camera-dynamsoft-document-normalizer@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.npmmirror.com/vision-camera-dynamsoft-document-normalizer/-/vision-camera-dynamsoft-document-normalizer-3.2.2.tgz"
+  integrity sha512-jJJNt0dX0ieM5XrJ/vzSSDgaB5qyhReqM7CIhZ5TN5+crEPNRGqDOAx9LZvL+S7yO8NRHg5vMYnGNoBIdfPz0Q==
 
 vlq@^1.0.0:
   version "1.0.1"

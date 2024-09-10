@@ -16,7 +16,9 @@
     "react-native-gesture-handler": "^2.19.0",
     "react-native-image-picker": "^7.1.2",
     "react-native-reanimated": "^3.15.1",
-    "react-native-svg": "^15.6.0"
+    "react-native-svg": "^15.6.0",
+    "react-native-vision-camera": "^4.5.3",
+    "vision-camera-dynamsoft-document-normalizer": "^3.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
