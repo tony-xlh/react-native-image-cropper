@@ -1,4 +1,12 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# react-native-image-cropper
+
+This is a React Native demo for cropping images.
+
+[Dynamsoft Document Normalizer](https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer) is used to detect the boundaries of documents and crop the image.
+
+![IMG_0402](https://github.com/user-attachments/assets/4a2f5b39-4ad3-4eb9-babb-ebf3c47e8fde)
+
+![IMG_0403](https://github.com/user-attachments/assets/25aafbec-747b-4307-bbd9-1d042c2fe7d5)
 
 # Getting Started
 
