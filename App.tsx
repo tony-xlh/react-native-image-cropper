@@ -51,7 +51,7 @@ export default function App() {
       {!showCropper && (
         <View style={styles.home}>
           <Text style={styles.title}>
-            Dynamsoft Docuemnt Normalizer Demo
+            Dynamsoft Document Normalizer Demo
           </Text>
           <Separator />
           <Button

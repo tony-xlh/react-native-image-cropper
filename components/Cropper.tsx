@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import { Alert, BackHandler, StyleSheet, Text, TouchableOpacity, useWindowDimensions} from 'react-native';
-import { bottomLeft, Canvas, Fill, Image, Points, Rect, useImage, vec } from '@shopify/react-native-skia';
+import { Canvas, Fill, Image, Points, Rect, useImage, vec } from '@shopify/react-native-skia';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { runOnJS, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import * as DDN from 'vision-camera-dynamsoft-document-normalizer';
@@ -17,6 +17,7 @@ export interface CropperProps{
   onCanceled?: () => void;
   onConfirmed?: (path:string) => void;
 }
+
 export interface Point {
   x: number;
   y: number;
