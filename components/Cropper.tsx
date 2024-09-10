@@ -151,8 +151,10 @@ export default function Cropper(props:CropperProps) {
       let index = selectedIndex;
       if (index !== -1) {
         let newPoints = JSON.parse(JSON.stringify(points.value));
-        newPoints[index].x = newPoints[index].x + e.changeX;
-        newPoints[index].y = newPoints[index].y + e.changeY;
+        if (Math.abs(e.changeX) < 5 && Math.abs(e.changeY) < 5) {
+          newPoints[index].x = newPoints[index].x + e.changeX;
+          newPoints[index].y = newPoints[index].y + e.changeY;
+        } 
         points.value = newPoints;
       }
     });
