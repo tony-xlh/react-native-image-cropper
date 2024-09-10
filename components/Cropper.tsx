@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import { Alert, BackHandler, StyleSheet, Text, TouchableOpacity, useWindowDimensions} from 'react-native';
-import { Canvas, Fill, Image, Points, Rect, useImage, vec } from '@shopify/react-native-skia';
+import { bottomLeft, Canvas, Fill, Image, Points, Rect, useImage, vec } from '@shopify/react-native-skia';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { runOnJS, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import * as DDN from 'vision-camera-dynamsoft-document-normalizer';
@@ -93,10 +93,17 @@ export default function Cropper(props:CropperProps) {
           break;
         }
       }
-      setDetecting(false);
       if (!detected) {
+        let photoWidth = props.photo.photoWidth;
+        let photoHeight = props.photo.photoHeight;
+        let topLeft = {x:photoWidth*0.2,y:photoHeight*0.4};
+        let topRight = {x:photoWidth*0.8,y:photoHeight*0.4};
+        let bottomRight = {x:photoWidth*0.8,y:photoHeight*0.7};
+        let bottomLeft = {x:photoWidth*0.2,y:photoHeight*0.7};
+        points.value = scaledPoints([topLeft,topRight,bottomRight,bottomLeft]); //use a preset region
         Alert.alert('','No documents detected');
       }
+      setDetecting(false);
     }
   };
 
