@@ -177,7 +177,7 @@ export default function Cropper(props:CropperProps) {
           const rect = rectList[index];
           let diffX = Math.abs(e.absoluteX - rect.x.value);
           let diffY = Math.abs(e.absoluteY - rect.y.value);
-          if (diffX < 20 && diffY < 20) {
+          if (diffX < 35 && diffY < 35) {
             runOnJS(setSelectedIndex)(index);
             break;
           }
