@@ -28,6 +28,7 @@ export default function Cropper(props:CropperProps) {
   const image = useImage(props.photo!.photoUri);
   const { width, height } = useWindowDimensions();
   const points = useSharedValue(defaultPoints);
+  const [detecting,setDetecting] = useState(true);
   const polygonPoints = useDerivedValue(() => {
     return [vec(points.value[0].x,points.value[0].y),
     vec(points.value[1].x,points.value[1].y),
@@ -92,6 +93,7 @@ export default function Cropper(props:CropperProps) {
           break;
         }
       }
+      setDetecting(false);
       if (!detected) {
         Alert.alert('','No documents detected');
       }
@@ -212,14 +214,18 @@ export default function Cropper(props:CropperProps) {
         <Canvas style={{ flex: 1 }}>
           <Fill color="white" />
           <Image image={image} fit="contain" x={0} y={0} width={width} height={height} />
-          <Points
-            points={polygonPoints}
-            mode="polygon"
-            color="lightblue"
-            style="fill"
-            strokeWidth={4}
-          />
-          {rects()}
+          {!detecting && (
+            <>
+            <Points
+              points={polygonPoints}
+              mode="polygon"
+              color="lightblue"
+              style="fill"
+              strokeWidth={4}
+            />
+            {rects()}
+          </>
+          )}
         </Canvas>
       </GestureDetector>
       <TouchableOpacity
