@@ -34,7 +34,7 @@ export default function Cropper(props:CropperProps) {
     vec(points.value[3].x,points.value[3].y),
     vec(points.value[0].x,points.value[0].y)];
   },[points]);
-  const selectedIndex = useSharedValue(-1);
+  const [selectedIndex,setSelectedIndex] = useState(-1);
   const rectWidth = 10;
   const rect1X = useDerivedValue(() => {
     return points.value[0].x - rectWidth;
@@ -82,7 +82,7 @@ export default function Cropper(props:CropperProps) {
 
   const panGesture = Gesture.Pan()
     .onChange((e) => {
-      let index = selectedIndex.value;
+      let index = selectedIndex;
       if (index !== -1) {
         let newPoints = JSON.parse(JSON.stringify(points.value));
         newPoints[index].x = newPoints[index].x + e.changeX;
@@ -100,7 +100,7 @@ export default function Cropper(props:CropperProps) {
           let diffX = Math.abs(e.absoluteX - rect.x.value);
           let diffY = Math.abs(e.absoluteY - rect.y.value);
           if (diffX < 20 && diffY < 20) {
-            selectedIndex.value = index;
+            runOnJS(setSelectedIndex)(index);
             break;
           }
         }
@@ -113,7 +113,7 @@ export default function Cropper(props:CropperProps) {
   const rects = () => {
     let rectList = [{x:rect1X,y:rect1Y},{x:rect2X,y:rect2Y},{x:rect3X,y:rect3Y},{x:rect4X,y:rect4Y}];
     const items = rectList.map((rect,index) =>
-      <Rect key={'rect-' + index}  style="stroke" strokeWidth={4} x={rect.x} y={rect.y} width={rectWidth} height={rectWidth} color="lightblue" />
+      <Rect key={'rect-' + index}  style="stroke" strokeWidth={(index === selectedIndex) ? 6 : 4} x={rect.x} y={rect.y} width={rectWidth} height={rectWidth} color="lightblue" />
     );
     return items;
   };
