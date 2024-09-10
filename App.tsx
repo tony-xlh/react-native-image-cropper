@@ -18,7 +18,6 @@ export default function App() {
     const response = await launchImageLibrary({ mediaType: 'photo'});
     if (response && response.assets) {
       if (response.assets[0]!.uri) {
-        console.log(response.assets[0]!.uri);
         setPhoto(
           {
             photoUri:response.assets[0]!.uri,
@@ -43,7 +42,6 @@ export default function App() {
   }, []);
 
   const displayCroppedImage = (path:string) => {
-    console.log("home: "+path);
     setShowCropper(false);
     setCroppedImageURL(path);
   };
