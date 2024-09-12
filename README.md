@@ -6,9 +6,10 @@ This is a React Native demo for cropping images.
 
 It uses React Native Skia and React Native Gestrue Handler to provide an interactive experience for editing the polygon of the object to crop.
 
-![IMG_0402](https://github.com/user-attachments/assets/4a2f5b39-4ad3-4eb9-babb-ebf3c47e8fde)
 
-![IMG_0403](https://github.com/user-attachments/assets/25aafbec-747b-4307-bbd9-1d042c2fe7d5)
+https://github.com/user-attachments/assets/d3241d46-c838-4d51-a15a-47d413c4052d
+
+
 
 # Getting Started
 
