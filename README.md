@@ -9,6 +9,7 @@ It uses React Native Skia and React Native Gestrue Handler to provide an interac
 
 https://github.com/user-attachments/assets/d3241d46-c838-4d51-a15a-47d413c4052d
 
+If you need to do live document detection via camera, check out this demo: https://github.com/tony-xlh/react-native-document-scanner
 
 
 # Getting Started
